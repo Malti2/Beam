@@ -53,4 +53,4 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" Beam.zip \
             --title "Beam ${{ steps.version.outputs.value }}" \
-            --notes "Unsigned build for Apple Silicon Macs (macOS 13+). First launch: right-click the app and choose Open."
+            --notes "Unsigned build for Apple Silicon Macs (macOS 14+). First launch: right-click the app and choose Open."
