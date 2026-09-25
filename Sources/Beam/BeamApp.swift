@@ -33,7 +33,7 @@ struct MenuBarView: View {
         }
         Divider()
         SettingsLink {
-            Text("Settings\u2026")
+            Text("Settings…")
         }
         Button("Quit Beam") { NSApplication.shared.terminate(nil) }
     }
