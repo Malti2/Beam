@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 struct Step: Identifiable {
     let id = UUID()
