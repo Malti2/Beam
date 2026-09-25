@@ -22,26 +22,19 @@ struct BeamApp: App {
 
 struct MenuBarView: View {
     @EnvironmentObject var state: AppState
-    @available(macOS 14.0, *)
-    @Environment(\.openSettings) private var openSettings
-
-    private func showSettings() {
-        if #available(macOS 14.0, *) {
-            openSettings()
-        } else {
-            state.openSettings()
-        }
-        NSApp.activate(ignoringOtherApps: true)
-    }
 
     var body: some View {
         Button("Open Beam") { state.showPanel() }
         if let version = state.updater.availableVersion {
             Divider()
-            Button("Update available: Beam \(version)") { showSettings() }
+            SettingsLink {
+                Text("Update available: Beam \(version)")
+            }
         }
         Divider()
-        Button("Settings…") { showSettings() }
+        SettingsLink {
+            Text("Settings\u2026")
+        }
         Button("Quit Beam") { NSApplication.shared.terminate(nil) }
     }
 }
