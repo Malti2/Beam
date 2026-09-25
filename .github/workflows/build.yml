@@ -18,6 +18,12 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
+      - name: Select latest Xcode
+        run: |
+          ls /Applications | grep -i xcode
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | grep -v beta | sort -V | tail -1)"
+          xcodebuild -version
+
       - name: Determine version
         id: version
         run: |
@@ -47,4 +53,4 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" Beam.zip \
             --title "Beam ${{ steps.version.outputs.value }}" \
-            --notes "Unsigned build for Apple Silicon and Intel Macs (macOS 13+). First launch: right-click the app and choose Open."
+            --notes "Unsigned build for Apple Silicon Macs (macOS 13+). First launch: right-click the app and choose Open."
