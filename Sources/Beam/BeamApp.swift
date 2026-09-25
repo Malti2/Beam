@@ -8,14 +8,8 @@ struct BeamApp: App {
 
     var body: some Scene {
         MenuBarExtra("Beam", systemImage: "command") {
-            Button("Open Beam") { state.showPanel() }
-            if let version = state.updater.availableVersion {
-                Divider()
-                Button("Update available: Beam \(version)") { state.openSettings() }
-            }
-            Divider()
-            Button("Settings…") { state.openSettings() }
-            Button("Quit Beam") { NSApplication.shared.terminate(nil) }
+            MenuBarView()
+                .environmentObject(state)
         }
         Settings {
             SettingsView()
@@ -23,6 +17,28 @@ struct BeamApp: App {
                 .environmentObject(state.endpoints)
                 .environmentObject(state.updater)
         }
+    }
+}
+
+struct MenuBarView: View {
+    @EnvironmentObject var state: AppState
+    @Environment(\.openSettings) private var openSettings
+
+    var body: some View {
+        Button("Open Beam") { state.showPanel() }
+        if let version = state.updater.availableVersion {
+            Divider()
+            Button("Update available: Beam \(version)") {
+                openSettings()
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
+        Divider()
+        Button("Settings…") {
+            openSettings()
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        Button("Quit Beam") { NSApplication.shared.terminate(nil) }
     }
 }
 

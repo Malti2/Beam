@@ -33,7 +33,18 @@ final class AppState: ObservableObject {
 
     func openSettings() {
         NSApp.activate(ignoringOtherApps: true)
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        // The selector name changed across macOS versions; try both.
+        for name in ["showSettingsWindow:", "showPreferencesWindow:"] {
+            if NSApp.sendAction(Selector(name), to: nil, from: nil) { break }
+        }
+        // Accessory apps do not come forward on their own; make sure the
+        // settings window is visible and key.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            NSApp.activate(ignoringOtherApps: true)
+            for window in NSApp.windows where window != NSApp.keyWindow && window.canBecomeKey && window.isVisible {
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
     }
 
     private func promptAccessibilityIfNeeded() {
